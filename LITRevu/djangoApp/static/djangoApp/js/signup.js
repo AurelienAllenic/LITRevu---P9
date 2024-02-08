@@ -1,5 +1,5 @@
 function handleClose(){
-    let cross = document.querySelector('.cross');
+    let cross = document.getElementById('returnHome');
     cross.addEventListener('click', () => {
         window.location.href = "/";
     })

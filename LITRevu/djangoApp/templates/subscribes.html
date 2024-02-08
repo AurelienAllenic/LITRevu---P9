@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITReview - Flux</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
+<link rel="stylesheet" href="{% static 'djangoApp/css/subscribes.css' %}">
+</head>
+<body>
+    <header id="header">
+        <h1>LITReview</h1>
+        <nav>
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <form action="{% url 'logout' %}" method="post" class="form-logout">
+                {% csrf_token %}
+                <button type="submit" class="btn-nav">Se déconnecter</button>
+            </form>            
+        </nav>
+    </header>
+    <div class="container_subscribes">
+        <form method="post" action="{% url 'subscribes' %}" class="subcontainer_subscribes">
+            <h2>Suivre d'autres utilisateurs</h2>
+            <div class="container_input_user">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Nom d'utilisateur" class="container_input_user">
+                <button type="submit" class="btn">Suivre</button>
+            </div>
+        </form>
+        <div class="subcontainer_subscribes">
+        <!-- Afficher les abonnements -->
+        <h2>Vos Abonnements</h2>
+        <ul>
+            {% for follow in user_follows %}
+                <li>{{ follow.followed_user.username }}</li>
+                <button type="submit" class="btn" value="{{ follow.followed_user.username }}">Se désabonner</button>
+            {% empty %}
+                <li>Pas d'abonnements.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="subcontainer_subscribes">
+        <!-- Afficher les abonnés -->
+        <h2>Vos Abonnés</h2>
+        <ul>
+            {% for follower in user_followers %}
+                <li>{{ follower.user.username }}</li>
+            {% empty %}
+                <li>Pas d'abonnés.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    </div>
+
+    <!--<script src="{% static 'djangoApp/js/home.js' %}"></script>-->
+</body>
+</html>

@@ -12,7 +12,7 @@
     background-color: #1d1c1c;
     color: #333;
 
-    font-size: 36px;
+    font-size: 30px;
     font-weight: bold;
     width: 100%;
 }
@@ -28,37 +28,52 @@
 .form{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    align-items: flex-end; /* Alignement à droite */
+    justify-content: space-between; /* Espacement entre les éléments */
+    width: 40%; /* Ajustez selon la largeur souhaitée */
     gap: 50px;
 }
-.container_inputs input{
+
+.container_inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+input{
     border-top: none;
     border-left: none;
     border-right: none;
-    gap: 2rem;
     font-size: 18px;
+    width: 40%;
 }
-.container_inputs input:hover{
+input:hover{
     border-bottom: 2px solid black;
     cursor: pointer;
     transition: all ease 0.5s;
     transform: scale(1.02);
 }
-.container_inputs input:focus{
+input:focus{
     outline: none;
+}
+.container_buttons{
+    display: flex;
+    justify-content: flex-end; /* Alignement à droite */
+    gap: 20px;
+    width: 100%;
 }
 .btn{
     outline: none;
     border: none;
     margin-top: 20px;
-    width: 40%;
-    height: 30px;
+    padding: 2%;
     background-color: #1d1c1c;
     color: rgba(255, 255, 255, 0.92);
     font-size: 18px;
     font-weight: bold;
+    border-radius: 15px 15px 15px 15px;
 }
 .btn:hover{
     cursor: pointer;

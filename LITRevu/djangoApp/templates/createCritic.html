@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITReview - Créer une critique</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'djangoApp/css/createCritic.css' %}">
+</head>
+<body>
+    <header id="header">
+        <h1>LITReview</h1>
+        <nav>
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <form action="{% url 'logout' %}" method="post" class="form-logout">
+                {% csrf_token %}
+                <button type="submit" class="btn-nav">Se déconnecter</button>
+            </form>            
+        </nav>
+    </header>
+    <section class="container_createCritic">
+        <h1 class="main_title_critic">Créer une critique</h1>
+        <form method="post" enctype="multipart/form-data" class="form_critic">
+            {% csrf_token %}
+            <div class="container_item">
+                {{ ticket_form.title.label_tag }}  <!-- Titre -->
+                {{ ticket_form.title }}
+
+                {{ ticket_form.description.label_tag }}  <!-- Description -->
+                {{ ticket_form.description }}
+
+                {{ ticket_form.image.label_tag }}  <!-- Image à télécharger -->
+                {{ ticket_form.image }}
+            </div>
+            <div class="container_item">
+                {{ review_form.headline.label_tag }}  <!-- Titre de la critique -->
+                {{ review_form.headline }}
+                
+                {{ review_form.rating.label_tag }}  <!-- Note -->
+                <div class="container_radio">
+                {{ review_form.rating }}
+            </div>
+                </div>
+                </div>
+                {{ review_form.body.label_tag }}  <!-- Corps de la critique -->
+                {{ review_form.body }}
+            </div>
+            <button type="submit" class="btn">Soumettre</button>  <!-- Bouton de soumission -->
+        </form>
+    </section>
+</body>
+</html>

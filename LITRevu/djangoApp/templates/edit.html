@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITReview</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
+</head>
+<body>
+    <header id="header"><h1>LITReview</h1></header>
+    <div class="container_home">
+        <h2>Formulaire de modification</h2>
+        <p>Type de contenu : {{ item.type }}</p>
+        {% if item.type == 'review' %}
+            <p>{{ item.headline }}</p>
+            <p>{{ item.body }}</p>
+            <p>{{ item.time_created|date:"H:i, d F Y" }}</p>
+        {% elif item.type == 'ticket' %}
+            <p>{{ item.title }}</p>
+            <p>{{ item.description }}</p>
+            <p>{{ item.time_created|date:"H:i, d F Y" }}</p>
+        {% else %}
+            <p>Type non reconnu. {{ item.type }}{{item}}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

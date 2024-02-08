@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITReview - Subscribes</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
+<link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
+</head>
+<body>
+    <header id="header">
+        <h1>LITReview</h1>
+        <nav>
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <form action="{% url 'logout' %}" method="post" class="form-logout">
+                {% csrf_token %}
+                <button type="submit" class="btn-nav">Se déconnecter</button>
+            </form>            
+        </nav>
+    </header>
+    <div class="container_flux">
+        {% for item in items %}
+            {% if item.headline %}  <!-- Supposons que 'headline' soit unique aux Reviews -->
+                <div class="review">
+                    <div class="review-header">
+                        <p>
+                            Vous avez créé une critique.
+                        </p>
+                      <!-- Afficher l'heure de création avec le format désiré -->
+                    <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
+                    </div>
+                    <h2>{{ item.headline }}</h2>
+                    <p>Note : 
+                        <span class="star-rating">
+                            {% for i in "12345" %}
+                            <span class="{% if item.rating|default:'0'|add:0 >= forloop.counter %}filled{% endif %}">&#9733;</span>
+                        {% endfor %}
+                        </span>
+                    </p>
+                    <p>{{ item.body }}</p>
+                    <!-- Afficher les détails spécifiques aux critiques -->
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="Image de la critique" class="flux-img"/>
+                    {% endif %}
+                    <div class="container_buttons">
+                            <a href="{% url 'edit_post' type='review' id=item.id %}" class="btn btn-primary">Modifier la critique</a>
+                            <button data-id="{{ item.id }}" data-type="review" data-name="{{ item.headline }}" class="btn btn-danger">Supprimer la critique</button>
+                    </div>              
+                </div>
+            {% else %}  <!-- Sinon, c'est un Ticket -->
+                <div class="ticket">
+                    <div class="review-header">
+                        <p>
+                            Vous avez demandé une critique.
+                        </p>
+                        <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
+                    </div>
+                    <h2>{{ item.title }}</h2>
+                    <p>{{ item.description }}</p>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="Image du ticket" class="flux-img"/>
+                    {% endif %}
+                    <div class="container_buttons">
+                            <a href="{% url 'edit_post' type='ticket' id=item.id %}" class="btn btn-primary">Modifier le ticket</a>
+                            <button data-id="{{ item.id }}" data-type="ticket" data-name="{{ item.title }}" class="btn btn-danger">Supprimer le ticket</button>
+                    </div>                    
+                </div>
+            {% endif %}
+            <article class="modal" id="modal">
+                <div class="modal-content">
+                        <h1 class="question-delete"></h1>
+                        <p class="title-delete"></p>
+                    <div class="container_buttons">
+                        <button class="btn deleteYes">Oui, supprimer</button>
+                        <button class="btn deleteNo">Non, annuler</button>
+                    </div>
+                </div>
+            </article>
+            
+        {% empty %}
+            <p>Vous n'avez créé ou demandé aucune critique</p>
+        {% endfor %}
+        
+    </div>
+        
+
+    <script src="{% static 'djangoApp/js/posts.js' %}"></script>
+</body>
+</html>

@@ -1,6 +1,4 @@
-function login() {
-    
-}
+
 function signupNavigation() {
     let signup = document.getElementById('signup');
     signup.addEventListener('click', () => {

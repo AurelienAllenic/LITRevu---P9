@@ -1,0 +1,136 @@
+.container_createCritic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 40px;
+    margin-top: 2%;
+    margin-bottom: 5%;
+}
+
+.main_title_critic {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.form_critic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Conteneur pour les boutons */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Pour aligner les boutons à gauche et à droite */
+    width: 100%;
+}
+
+.container_item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
+}
+
+.container_critic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.sub_title_critic {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.label_critic {
+
+}
+
+.btn{
+    outline: none;
+    border: none;
+    background-color: #1d1c1c;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 15px 15px 15px 15px;
+    width: 20%; /* Ajustez la largeur selon vos besoins */
+}
+.btn:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 15px 15px 15px 15px;
+    transition: all ease 0.5s;
+    transform: scale(1.05);
+}
+.btn_radio[type=radio] {
+    display: none;
+}
+
+/* Styliser le label pour qu'il ressemble à un bouton */
+.btn_radio label {
+    /* Vos styles actuels pour les boutons */
+    display: inline-block;
+    margin: 4px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Quand le bouton radio est sélectionné, changer l'apparence du label */
+.btn_radio[type=radio]:checked + label {
+    background-color: #1d1c1c;
+    color: white;
+    border-color: #1d1c1c;
+}
+
+.description_item {
+    height: 100px;
+    width: 100%;
+}
+
+.input_critic {
+    width: 100%;
+    padding: 0.2%;
+}
+.container_radio{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.btn_radio{
+    padding: 1.5%;
+    background-color: transparent;
+    border-radius: 15px 15px 15px 15px;
+    border: 1px solid black;
+}
+.btn_radio:hover{
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    transform: scale(1.05);
+    transition: all ease 0.5s;
+}
+[id =id_rating] {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px; /* Espacement entre les boutons de notation */
+}
+.container_radio button.selected {
+    background-color: #009688; /* Couleur de fond lorsque le bouton est sélectionné */
+    color: #fff; /* Couleur du texte lorsque le bouton est sélectionné */
+}

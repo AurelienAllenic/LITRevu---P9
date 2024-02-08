@@ -15,14 +15,22 @@
             <button type="submit" class="btn" id="signup">S'inscrire</button>
         </div>
         <div class="container_login">
+            {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
             <h3>Connectez-vous</h3>
-            <form action="" class="form">
+            <form method="post" action="{% url 'login' %}" class="form">
+                {% csrf_token %}
                 <div class="container_inputs">
-                    <input type="text" placeholder="Nom d'utilisateur">
-                    <input type="password" placeholder="Mot de passe">
+                    <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                    <input type="password" name="password" placeholder="Mot de passe" required>
                 </div>
                 <button type="submit" class="btn" id="login">Se connecter</button>
-            </form>
+            </form>            
         </div>
     </div>
 
