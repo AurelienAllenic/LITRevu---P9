@@ -22,21 +22,45 @@
         </nav>
     </header>
     <div class="container_subscribes">
-        <form method="post" action="{% url 'subscribes' %}" class="subcontainer_subscribes">
+        <form method="post" action="{% url 'search_users' %}" class="subcontainer_subscribes">
+            {% csrf_token %}
             <h2>Suivre d'autres utilisateurs</h2>
             <div class="container_input_user">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="Nom d'utilisateur" class="container_input_user">
-                <button type="submit" class="btn">Suivre</button>
+                <input type="text" name="search_query" placeholder="Nom d'utilisateur" class="container_input_user">
+                <button type="submit" class="btn">Rechercher</button>
             </div>
         </form>
+        <div class="subcontainer_subscribes">
+            <!-- Afficher les utilisateurs correspondant à la recherche -->
+            <h2>Résultats de la recherche (cliquer pour suivre)</h2>
+            <ul>
+                {% for user in users %}
+                    <li>{{ user.username }}</li>
+                    <form method="post" action="{% url 'follow_user' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{ user.username }}">
+                        <button type="submit" class="btn">Suivre</button>
+                    </form>
+                {% empty %}
+                    <li>Aucun utilisateur trouvé.</li>
+                {% endfor %}
+            </ul>
+            
+        </div>
+    
+    
+        
         <div class="subcontainer_subscribes">
         <!-- Afficher les abonnements -->
         <h2>Vos Abonnements</h2>
         <ul>
             {% for follow in user_follows %}
                 <li>{{ follow.followed_user.username }}</li>
-                <button type="submit" class="btn" value="{{ follow.followed_user.username }}">Se désabonner</button>
+                <form method="post" action="{% url 'unfollow_user' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{ follow.followed_user.username }}">
+                    <button type="submit" class="btn">Se désabonner</button>
+                </form>
             {% empty %}
                 <li>Pas d'abonnements.</li>
             {% endfor %}

@@ -1,0 +1,63 @@
+.container_edit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 90%;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    padding: 2%;
+}
+.top_card{
+    display: flex;
+}
+.bottom_card{
+
+}
+.card_ticket{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    padding: 2%;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+}
+.container_author_date{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.container_indication{
+    display: flex;
+    justify-content: left;
+    width: 100%;
+}
+.edit-img{
+    object-fit: contain;
+    width: 100%;
+    border-radius: 15px 15px 15px 15px;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+}
+.form_edit{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 20px;
+    width: 100%;
+}
+.container_rating{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

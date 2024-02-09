@@ -34,7 +34,12 @@ urlpatterns = [
     path('createTicket', views.createTicket_view, name='createTicket'),
     path('logout', LogoutView.as_view(next_page='/'), name='logout'),
     path('edit/<str:type>/<int:id>/', views.edit_post, name='edit_post'),
+    path('edit_review/<int:id>/', views.edit_review, name='edit_review'),
+    path('edit_ticket/<int:id>/', views.edit_ticket, name='edit_ticket'),
     path('delete/<str:type>/<int:id>/', views.delete_post, name='delete_post'),
+    path('search_users', views.search_users, name='search_users'),
+    path('follow_user', views.follow_user, name='follow_user'),
+    path('unfollow_user', views.unfollow_user, name='unfollow_user'),
     path('admin', admin.site.urls),
 ]
 

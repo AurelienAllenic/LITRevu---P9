@@ -16,7 +16,7 @@ class Ticket(models.Model):
             'user': self.user,
             'time_created': self.time_created,
             'image': self.image.url if self.image else None,
-            'type': 'review'
+            'type': 'ticket'
         }
 
 class Review(models.Model):
@@ -27,6 +27,7 @@ class Review(models.Model):
     body = models.CharField(max_length=8192, blank=True)
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     time_created = models.DateTimeField(auto_now_add=True)
+    ticket = models.ForeignKey(Ticket, related_name='reviews', on_delete=models.CASCADE, null=True)  # Ajoutez ce champ pour établir la relation
 
     def get_fields(self):
         return {
@@ -37,6 +38,7 @@ class Review(models.Model):
             'time_created': self.time_created,
             'type': 'review'
         }
+
 
 class UserFollows(models.Model):
     user = models.ForeignKey(

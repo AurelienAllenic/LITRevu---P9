@@ -178,18 +178,64 @@ def tickets_view(request):
 
 @login_required
 def edit_post(request, type, id):
-    
     if type == 'ticket':
-        print(type)
         item = get_object_or_404(Ticket, pk=id, user=request.user)
-        print(json.dumps(item))
-        return render(request, 'edit.html', {'item': item})
+        reviews = item.reviews.all()  # Récupérer toutes les critiques associées à ce ticket
+        return render(request, 'edit.html', {'item': item, 'reviews': reviews, 'type': 'ticket'})
     elif type == 'review':
-        print(type)
         item = get_object_or_404(Review, pk=id, user=request.user)
-        return render(request, 'edit.html', {'item': item})
+        ticket = item.ticket  # Récupérer le ticket associé à cette critique
+        print(ticket)
+        return render(request, 'edit.html', {'item': item, 'ticket': ticket, 'type': 'review'})
     else:
         return HttpResponseBadRequest('Type non reconnu')
+
+
+
+@login_required
+def edit_review(request, id):
+    # Récupérer la critique à éditer
+    try:
+        review = Review.objects.get(id=id, user=request.user)
+    except Review.DoesNotExist:
+        # Gérer le cas où la critique n'existe pas ou n'appartient pas à l'utilisateur
+        return redirect('flux')  # Rediriger vers la page de votre choix
+
+    if request.method == 'POST':
+        # Traitement du formulaire soumis pour mettre à jour la critique
+        review_form = ReviewForm(request.POST, instance=review)
+        if review_form.is_valid():
+            review_form.save()
+            return redirect('flux')  # Rediriger vers la page de votre choix après la mise à jour
+    else:
+        # Afficher le formulaire de modification de la critique avec les données existantes pré-remplies
+        review_form = ReviewForm(instance=review)
+
+    context = {
+        'review_form': review_form,
+    }
+    return render(request, 'edit_review.html', context)
+
+@login_required
+def edit_ticket(request, id):
+    # Récupérer le ticket à éditer
+    ticket = get_object_or_404(Ticket, pk=id, user=request.user)
+    if request.method == 'POST':
+        # Créer une instance de TicketForm avec les données de la requête
+        form = TicketForm(request.POST, request.FILES, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect('flux')  # Rediriger vers la page de votre choix après la modification
+    else:
+        # Créer une instance de TicketForm avec l'instance de ticket existante
+        form = TicketForm(instance=ticket)
+
+    # Passer le formulaire au contexte du rendu
+    context = {
+        'form': form,
+        'item': ticket
+    }
+    return render(request, 'edit.html', context)
 
 
 @login_required
@@ -204,3 +250,50 @@ def delete_post(request, type, id):
         return redirect('posts')
     else:
         return HttpResponseBadRequest('Type non reconnu')
+
+def search_users(request):
+    users = []
+    if request.method == 'POST':
+        search_query = request.POST.get('search_query')
+        users = User.objects.filter(username__icontains=search_query)
+        if not users:
+            messages.error(request, "Aucun utilisateur n'a été trouvé avec ce nom.")
+    return render(request, 'subscribes.html', {'users': users})
+
+@login_required
+def follow_user(request):
+    if request.method == 'POST':
+        username_to_follow = request.POST.get('username')
+        try:
+            user_to_follow = User.objects.get(username=username_to_follow)
+            if user_to_follow != request.user and not UserFollows.objects.filter(user=request.user, followed_user=user_to_follow).exists():
+                UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
+                messages.success(request, f"Vous suivez maintenant {username_to_follow}")
+            else:
+                messages.error(request, "Vous ne pouvez pas suivre cet utilisateur")
+        except User.DoesNotExist:
+            messages.error(request, "Utilisateur non trouvé")
+
+    # Actualiser la liste d'abonnements
+    user_follows = UserFollows.objects.filter(user=request.user)
+
+    # Rediriger vers la page précédente après la requête POST
+    return render(request, 'subscribes.html', {'user_follows': user_follows})
+
+@login_required
+def unfollow_user(request):
+    if request.method == 'POST':
+        username_to_unfollow = request.POST.get('username')
+        try:
+            user_to_unfollow = User.objects.get(username=username_to_unfollow)
+            follow_relation = UserFollows.objects.filter(user=request.user, followed_user=user_to_unfollow).first()
+            if follow_relation:
+                follow_relation.delete()
+                messages.success(request, f"Vous avez arrêté de suivre {username_to_unfollow}")
+            else:
+                messages.error(request, "Vous ne suivez pas cet utilisateur")
+        except User.DoesNotExist:
+            messages.error(request, "Utilisateur non trouvé")
+
+    # Rediriger vers la page précédente après la requête POST
+    return redirect('subscribes')

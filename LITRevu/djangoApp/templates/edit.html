@@ -3,26 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LITReview</title>
+    <title>LITReview - edit</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'djangoApp/css/edit.css' %}">
     <link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
 </head>
 <body>
-    <header id="header"><h1>LITReview</h1></header>
-    <div class="container_home">
-        <h2>Formulaire de modification</h2>
-        <p>Type de contenu : {{ item.type }}</p>
-        {% if item.type == 'review' %}
-            <p>{{ item.headline }}</p>
-            <p>{{ item.body }}</p>
-            <p>{{ item.time_created|date:"H:i, d F Y" }}</p>
-        {% elif item.type == 'ticket' %}
-            <p>{{ item.title }}</p>
-            <p>{{ item.description }}</p>
-            <p>{{ item.time_created|date:"H:i, d F Y" }}</p>
+    <header id="header">
+        <h1>LITReview</h1>
+        <nav>
+            <a href="{% url 'flux' %}">Flux</a>
+            <a href="{% url 'posts' %}">Posts</a>
+            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <form action="{% url 'logout' %}" method="post" class="form-logout">
+                {% csrf_token %}
+                <button type="submit" class="btn-nav">Se déconnecter</button>
+            </form>            
+        </nav>
+    </header>
+    <div class="container_edit">
+        <h2>Formulaire de modification {% if item.headline %}de votre critique{% else %}de votre ticket{% endif %}</h2>
+        {% if item.headline %}
+        <div class="card">
+            <div class="container_indication">
+                <p>Vous êtes en train de poster en réponse à </p>
+            </div>
+            
+            <div class="top_card">
+                
+                <div class="card_ticket">
+                    <div class="container_author_date">
+                        {% if item.user == item.ticket.user%}
+                            <p>Vous avez demandé une critique</p>
+                            <p>{{ item.ticket.time_created|date:"H:i, d F Y" }}</p>
+                        {% else %}
+                            <p>{{ item.ticket.user.username }} a demandé une critique</p>
+                            <p>{{ item.ticket.time_created|date:"H:i, d F Y" }}</p>
+                        {% endif %}
+                    </div>
+                <!-- Afficher les informations du ticket ici -->
+                <p>{{ item.ticket.title }}</p>
+                <p>{{ item.ticket.description }}</p>
+                {% if item.ticket.image %}
+                    <img src="{{ item.ticket.image.url }}" alt="Image du ticket" class="edit-img"/>
+                {% endif %}
+                </div>  
+            </div>
+            <div class="card_ticket">
+                <div class="container_indication">
+                    <p>Critique </p>
+                </div>
+                <!-- Formulaire pour modifier la critique -->
+                <form id="editForm" method="post" action="{% url 'edit_review' item.id %}" class="form_edit">
+                    {% csrf_token %}
+                    <label for="headline">Titre</label>
+                    <input type="text" name="headline" placeholder={{item.headline}} id="headline">
+                    <label for="rating">Note</label>
+                    <div class="container_rating">
+                        {% for i in "12345" %}
+                            <input type="radio" name="rating" id="rating{{ forloop.counter }}" value="{{ forloop.counter }}" {% if forloop.counter == item.rating %}checked{% endif %}>
+                            <label for="rating{{ forloop.counter }}">{{ forloop.counter }}</label>
+                        {% endfor %}
+                    </div>
+                    <label for="body">Commentaires</label>
+                    <textarea name="body" placeholder={{item.body}} id="body"></textarea>
+                    <!-- Autres champs -->
+                    <button type="submit" class="btn">Envoyer</button>
+                </form>
+            </div>
+        </div>
         {% else %}
-            <p>Type non reconnu. {{ item.type }}{{item}}</p>
+        <div class="card_ticket">
+            <form id="editForm" method="post" action="{% url 'edit_ticket' item.id %}" class="form_edit" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="title">Titre</label>
+                <input type="text" name="title" id="title" placeholder="{{ item.title }}">
+                <label for="description">Description</label>
+                <input type="text" name="description" id="description" placeholder="{{ item.description }}">
+                <label for="image">Image</label>
+                <!-- Pré-remplir la valeur de l'input avec le nom de l'image s'il existe -->
+                <input type="file" name="image" id="image"/>
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="Image du ticket" class="edit-img"/>
+                {% endif %}
+                <button type="submit" class="btn">Envoyer</button>
+            </form>
+        </div>
+        
         {% endif %}
     </div>
+
+    <script>
+        // Remplir les champs du formulaire avec les informations de la critique
+       // document.addEventListener('DOMContentLoaded', function() {
+         //   var headline = "{{ item.headline }}";
+         //   var body = "{{ item.body }}";
+
+         //   document.getElementById('headline').value = headline;
+          //  document.getElementById('body').value = body;
+      //  });
+    </script>
 </body>
 </html>
