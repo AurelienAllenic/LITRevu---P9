@@ -7,29 +7,29 @@
 #header {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centre tout le contenu du header */
+    justify-content: center;
     height: 10vh;
     background-color: #1d1c1c;
     color: #333;
     width: 100%;
-    position: relative; /* Permet de positionner la nav en absolue */
+    position: relative;
 }
 
 #header h1 {
     font-size: 50px;
     font-weight: bold;
-    position: absolute; /* Positionne le titre indépendamment de la navigation */
-    left: 50%; /* Centre le titre */
-    transform: translateX(-50%); /* Ajuste le centrage */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 nav {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    position: absolute; /* Positionne la navigation */
-    right: 0; /* Place la navigation à droite */
-    margin-right: 20px; /* Espace à droite */
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
 }
 
 nav a, .btn-nav {
@@ -38,11 +38,12 @@ nav a, .btn-nav {
     font-size: 22px;
     margin-left: 20px;
 }
+
 nav a:hover, .btn-nav:hover {
     color: rgba(255, 255, 255, 0.145);
     transition: all ease 0.5s;
 }
-/* Style supplémentaire pour le bouton */
+
 .btn-nav {
     cursor: pointer;
     background-color: transparent;
@@ -51,6 +52,7 @@ nav a:hover, .btn-nav:hover {
     padding-inline: 0px;
     padding-block: 0px;
 }
+
 .form-logout{
     display: flex;
     flex-direction: column;

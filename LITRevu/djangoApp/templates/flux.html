@@ -10,22 +10,22 @@
 </head>
 <body>
     <header id="header">
-        <h1>LITReview</h1>
+        <h1 tabindex="0">LITReview</h1>
         <nav>
-            <a href="{% url 'flux' %}">Flux</a>
-            <a href="{% url 'posts' %}">Posts</a>
-            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <a href="{% url 'flux' %}" tabindex="2">Flux</a>
+            <a href="{% url 'posts' %}" tabindex="3">Posts</a>
+            <a href="{% url 'subscribes' %}" tabindex="4">Abonnements</a>
             <form action="{% url 'logout' %}" method="post" class="form-logout">
                 {% csrf_token %}
-                <button type="submit" class="btn-nav">Se déconnecter</button>
+                <button type="submit" class="btn-nav" tabindex="5">Se déconnecter</button>
             </form>            
         </nav>
     </header>
     <div class="container_buttons">
         {% if not ticket_exists %}
-            <a href="{% url 'createCritic' %}" class="btn">Créer une critique</a>
+            <a href="{% url 'createCritic' %}" class="btn" tabindex="6">Créer une critique</a>
         {% endif %}
-        <a href="{% url 'createTicket' %}" class="btn">Demander une critique</a>
+        <a href="{% url 'createTicket' %}" class="btn" tabindex="7">Demander une critique</a>
     </div>
     <div class="container_flux">
         {% for item in items %}
@@ -54,7 +54,7 @@
                     </div>
                     <p>{{ item.body }}</p>
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="Image de la critique" class="flux-img"/>
+                        <img src="{{ item.image.url }}" alt="{{item.headline}}" class="flux-img"/>
                     {% endif %}
                 </div>
             {% else %}
@@ -72,7 +72,7 @@
                     <h2>{{ item.title }}</h2>
                     <p>{{ item.description }}</p>
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="Image du ticket" class="flux-img"/>
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="flux-img"/>
                     {% endif %}
                     {% for review in item.get_related_reviews %}
                         <div class="related-review">
@@ -102,7 +102,7 @@
                     {% empty %}
                         <p>Aucune critique associée.</p>
                         <div class="container_buttons">
-                            <a href="{% url 'createCriticInResponse' ticket_id=item.id %}" class="btn">Créer une critique</a>
+                            <a href="{% url 'createCriticInResponse' ticket_id=item.id %}" class="btn" tabindex="{{ forloop.counter0|add:8 }}">Créer une critique</a>
                     </div>
                     {% endfor %}
                 </div>

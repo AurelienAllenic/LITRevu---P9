@@ -3,12 +3,14 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 a{
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 [id = header]{
     display: flex;
     justify-content: center;
@@ -20,12 +22,20 @@ a{
     font-weight: bold;
     width: 100%;
 }
+
 .container_home{
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 90vh;
+}
+.container_options{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90vh;
 }
 .container_signup{
     display: flex;
@@ -35,6 +45,7 @@ a{
     width: 100%;
     gap: 20px;
 }
+
 .container_signup h2{
     font-size: 36px;
     font-weight: bold;
@@ -44,6 +55,7 @@ a{
     justify-content: center;
     flex-wrap: nowrap;
 }
+
 .container_login{
     display: flex;
     flex-direction: column;
@@ -52,10 +64,12 @@ a{
     width: 100%;
     gap: 50px;
 }
+
 .container_login h3{
     font-size: 36px;
     font-weight: bold;
 }
+
 .container_inputs{
     display: flex;
     flex-direction: column;
@@ -64,21 +78,25 @@ a{
     width: 100%;
     gap: 20px;
 }
+
 .container_inputs input{
     border-top: none;
     border-left: none;
     border-right: none;
     width: 40%;
 }
+
 .container_inputs input:hover{
     border-bottom: 2px solid black;
     cursor: pointer;
     transition: all ease 0.5s;
     transform: scale(1.02);
 }
+
 .container_inputs input:focus{
     outline: none;
 }
+
 .form{
     display: flex;
     flex-direction: column;
@@ -86,6 +104,7 @@ a{
     justify-content: center;
     width: 100%;
 }
+
 .btn:hover{
     cursor: pointer;
     background-color: white;
@@ -96,8 +115,24 @@ a{
     transform: scale(1.05);
     transform-origin: center;
 }
-
+.btn:focus{
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 15px 15px 15px 15px;
+  transition: all ease 0.5s;
+  transform: scale(1.05);
+  transform-origin: center;
+}
+.messages{
+  display: flex;
+  list-style: none;
+  position: absolute;
+  top: 15%;
+}
 /* FLUX */
+
 .container_flux{
     display: flex;
     flex-direction: column;
@@ -105,6 +140,7 @@ a{
     justify-content: center;
     width: 100%;
 }
+
 .container_tickets{
     display: flex;
     flex-direction: column;
@@ -114,6 +150,7 @@ a{
     width: 42%;
     height: auto;
 }
+
 .btn{
     outline: none;
     border: none;
@@ -126,6 +163,7 @@ a{
     padding: 5px;
     border-radius: 15px 15px 15px 15px;
 }
+
 .container_buttons{
     display: flex;
     justify-content: center;
@@ -133,12 +171,14 @@ a{
     gap: 20px;
     width: 100%;
 }
+
 .danger {
     margin: 10px 0;
     padding: 10px;
     border: 1px solid red;
     color: red;
 }
+
 .review, .ticket{
     display: flex;
     flex-direction: column;
@@ -151,6 +191,7 @@ a{
     -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
 }
+
 .related-review{
   -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
@@ -159,18 +200,22 @@ a{
     padding: 3%;
     gap: 2rem;
 }
+
 .star-rating {
-    direction: rtl; /* Pour que les étoiles soient remplies de droite à gauche */
-    font-size: 0; /* Pour éliminer l'espace entre les éléments inline-block */
+    direction: rtl;
+    font-size: 0;
   }
+
   .star-rating span {
     display: inline-block;
-    font-size: 24px; /* Taille des étoiles */
-    color: #ddd; /* Couleur des étoiles non remplies */
+    font-size: 24px;
+    color: #ddd;
   }
+
   .star-rating span.filled {
-    color: #f5a623; /* Couleur des étoiles remplies */
+    color: #f5a623;
   }
+
   .flux-img{
     object-fit: contain;
     width: 100%;
@@ -178,20 +223,25 @@ a{
     -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
   }
+
   .review-header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
+
   .time{
     font-size: 17px;
   }
+
+
   .container_buttons{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100px;
   }
+
   .container-title-score{
     display: flex;
     flex-direction: row;
@@ -199,6 +249,7 @@ a{
     gap: 1rem;
     width: 100%;
   }
+
   .modal{
     display: none;
     position: fixed;
@@ -206,7 +257,6 @@ a{
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
-
   }
 
   .modal-content{
@@ -222,6 +272,7 @@ a{
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
     border-radius: 15px 15px 15px 15px;
   }
+
   .title-delete{
     font-size: 25px;
     text-decoration: underline;

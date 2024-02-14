@@ -306,6 +306,8 @@ def edit_ticket(request, id):
 def delete_post(request, type, id):
     if type == 'ticket':
         ticket = get_object_or_404(Ticket, id=id, user=request.user)
+        if ticket.image:
+            ticket.image.delete(save=False)
         ticket.delete()
         return redirect('posts')
     elif type == 'review':

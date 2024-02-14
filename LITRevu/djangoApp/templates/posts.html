@@ -23,14 +23,13 @@
     </header>
     <div class="container_flux">
         {% for item in items %}
-            {% if item.headline %}  <!-- Supposons que 'headline' soit unique aux Reviews -->
+            {% if item.headline %}  <!-- 'headline' est unique aux Reviews -->
                 <div class="review">
                     <div class="review-header">
                         <p>
                             Vous avez créé une critique.
                         </p>
-                      <!-- Afficher l'heure de création avec le format désiré -->
-                    <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
+                        <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
                     </div>
                     <h2>{{ item.headline }}</h2>
                     <p>Note : 
@@ -41,13 +40,12 @@
                         </span>
                     </p>
                     <p>{{ item.body }}</p>
-                    <!-- Afficher les détails spécifiques aux critiques -->
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="Image de la critique" class="flux-img"/>
+                        <img src="{{ item.image.url }}" alt="{{item.headline}}" class="flux-img"/>
                     {% endif %}
                     <div class="container_buttons">
-                            <a href="{% url 'edit_post' type='review' id=item.id %}" class="btn btn-primary">Modifier la critique</a>
-                            <button data-id="{{ item.id }}" data-type="review" data-name="{{ item.headline }}" class="btn btn-danger">Supprimer la critique</button>
+                        <a href="{% url 'edit_post' type='review' id=item.id %}" class="btn btn-primary">Modifier la critique</a>
+                        <button data-id="{{ item.id }}" data-type="review" data-name="{{ item.headline }}" class="btn btn-danger">Supprimer la critique</button>
                     </div>              
                 </div>
             {% else %}  <!-- Sinon, c'est un Ticket -->
@@ -61,32 +59,28 @@
                     <h2>{{ item.title }}</h2>
                     <p>{{ item.description }}</p>
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="Image du ticket" class="flux-img"/>
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="flux-img"/>
                     {% endif %}
                     <div class="container_buttons">
-                            <a href="{% url 'edit_post' type='ticket' id=item.id %}" class="btn btn-primary">Modifier le ticket</a>
-                            <button data-id="{{ item.id }}" data-type="ticket" data-name="{{ item.title }}" class="btn btn-danger">Supprimer le ticket</button>
+                        <a href="{% url 'edit_post' type='ticket' id=item.id %}" class="btn btn-primary">Modifier le ticket</a>
+                        <button data-id="{{ item.id }}" data-type="ticket" data-name="{{ item.title }}" class="btn btn-danger">Supprimer le ticket</button>
                     </div>                    
                 </div>
             {% endif %}
             <article class="modal" id="modal">
                 <div class="modal-content">
-                        <h1 class="question-delete"></h1>
-                        <p class="title-delete"></p>
+                    <h1 class="question-delete"></h1>
+                    <p class="title-delete"></p>
                     <div class="container_buttons">
                         <button class="btn deleteYes">Oui, supprimer</button>
                         <button class="btn deleteNo">Non, annuler</button>
                     </div>
                 </div>
             </article>
-            
         {% empty %}
             <p>Vous n'avez créé ou demandé aucune critique</p>
         {% endfor %}
-        
     </div>
-        
-
     <script src="{% static 'djangoApp/js/posts.js' %}"></script>
 </body>
 </html>

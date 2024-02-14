@@ -10,28 +10,32 @@
 </head>
 <body>
     <header id="header">
-        <h1>LITReview</h1>
+        <h1 tabindex="0">LITReview</h1>
         <nav>
-            <a href="{% url 'flux' %}">Flux</a>
-            <a href="{% url 'posts' %}">Posts</a>
-            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <a href="{% url 'flux' %}" tabindex="1">Flux</a>
+            <a href="{% url 'posts' %}" tabindex="2">Posts</a>
+            <a href="{% url 'subscribes' %}" tabindex="3">Abonnements</a>
             <form action="{% url 'logout' %}" method="post" class="form-logout">
                 {% csrf_token %}
-                <button type="submit" class="btn-nav">Se déconnecter</button>
+                <button type="submit" class="btn-nav" tabindex="4">Se déconnecter</button>
             </form>            
         </nav>
     </header>
     <section class="container_createCriticInResponse">
         <div class="container_all_form">
-            <h1 class="main_title_critic">Créer une critique</h1>
+            <h1 class="main_title_critic response_padding">Créer une critique</h1>
             <div class="ticket-details_response">
-                <div class="ticket-details_response"><h2 class="main_title_critic_response">Vous êtes en train de poster en réponse à</h2></div>
-                
+                <div class="ticket-details_response">
+                    <h2 class="main_title_critic_response">Vous êtes en train de poster en réponse à</h2>
+                </div>
                 <div class="container_indication_response">
                     <h2>{{ticket.user.username}} a demandé une critique</h2>
                     <p><strong>Titre :</strong> {{ ticket.title }}</p>
-                    <p><strong>Description :</strong> {{ ticket.description }}</p>
-                    <img class="img_response" src="{{ ticket.image.url }}" alt="Image du ticket" class="flux-img"/>
+                    <p>
+                        <strong>Description :</strong> 
+                        {{ ticket.description }}
+                    </p>
+                    <img class="img_response" src="{{ ticket.image.url }}" alt="{{ ticket.title }}" class="flux-img"/>
                 </div>
             </div>
             <form method="post" enctype="multipart/form-data" class="form_critic_response">
@@ -49,7 +53,7 @@
                     {{ review_form.body.label_tag }}
                     {{ review_form.body }}
                 </div>
-                <button type="submit" class="btn">Soumettre</button>
+                <button type="submit" class="btn" tabindex="11">Soumettre</button>
             </form>
         </div>
     </section>

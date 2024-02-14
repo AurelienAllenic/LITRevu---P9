@@ -8,11 +8,13 @@
     gap: 40px;
     text-align: center;
 }
+
 .subcontainer_subscribes{
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
 .follow-new-user, .user-subscriptions, .user-followers {
     display: flex;
     flex-direction: column;
@@ -23,9 +25,11 @@
     list-style-type: none;
     padding: 0;
 }
+
 ul{
     list-style: none;
 }
+
 .container_input_user{
     display: flex;
     align-items: center;
@@ -34,6 +38,7 @@ ul{
     gap: 3px;
     padding: 1.5%;
 }
+
 .btn{
     outline: none;
     border: none;
@@ -43,7 +48,8 @@ ul{
     font-size: 18px;
     font-weight: bold;
 }
-.btn:hover{
+
+.btn:hover, .btn:focus{
     cursor: pointer;
     background-color: white;
     color: black;

@@ -10,14 +10,14 @@
 </head>
 <body>
     <header id="header">
-        <h1>LITReview</h1>
+        <h1 tabindex="0">LITReview</h1>
         <nav>
-            <a href="{% url 'flux' %}">Flux</a>
-            <a href="{% url 'posts' %}">Posts</a>
-            <a href="{% url 'subscribes' %}">Abonnements</a>
+            <a href="{% url 'flux' %}" tabindex="1">Flux</a>
+            <a href="{% url 'posts' %}" tabindex="2">Posts</a>
+            <a href="{% url 'subscribes' %}" tabindex="3">Abonnements</a>
             <form action="{% url 'logout' %}" method="post" class="form-logout">
                 {% csrf_token %}
-                <button type="submit" class="btn-nav">Se déconnecter</button>
+                <button type="submit" class="btn-nav" tabindex="4">Se déconnecter</button>
             </form>            
         </nav>
     </header>
@@ -50,7 +50,7 @@
                     {{ review_form.body }}
                 </div>
             </div>
-            <button type="submit" class="btn">Soumettre</button>
+            <button type="submit" class="btn" tabindex="14">Soumettre</button>
         </form>
     </section>
 </body>

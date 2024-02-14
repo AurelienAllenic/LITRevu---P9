@@ -23,10 +23,9 @@
     width: 100%;
 }
 
-/* Conteneur pour les boutons */
 .button-container {
     display: flex;
-    justify-content: space-between; /* Pour aligner les boutons à gauche et à droite */
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -52,10 +51,6 @@
     text-align: left;
 }
 
-.label_critic {
-
-}
-
 .btn{
     outline: none;
     border: none;
@@ -65,9 +60,10 @@
     font-weight: bold;
     padding: 5px;
     border-radius: 15px 15px 15px 15px;
-    width: 20%; /* Ajustez la largeur selon vos besoins */
+    width: 20%;
 }
-.btn:hover{
+
+.btn:hover, .btn:focus{
     cursor: pointer;
     background-color: white;
     color: black;
@@ -80,9 +76,7 @@
     display: none;
 }
 
-/* Styliser le label pour qu'il ressemble à un bouton */
 .btn_radio label {
-    /* Vos styles actuels pour les boutons */
     display: inline-block;
     margin: 4px;
     padding: 10px;
@@ -92,7 +86,6 @@
     cursor: pointer;
 }
 
-/* Quand le bouton radio est sélectionné, changer l'apparence du label */
 .btn_radio[type=radio]:checked + label {
     background-color: #1d1c1c;
     color: white;
@@ -108,17 +101,20 @@
     width: 100%;
     padding: 0.2%;
 }
+
 .container_radio{
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
+
 .btn_radio{
     padding: 1.5%;
     background-color: transparent;
     border-radius: 15px 15px 15px 15px;
     border: 1px solid black;
 }
+
 .btn_radio:hover{
     cursor: pointer;
     background-color: black;
@@ -126,14 +122,17 @@
     transform: scale(1.05);
     transition: all ease 0.5s;
 }
+
 [id =id_rating] {
     display: flex;
     gap: 2rem;
 }
+
 .container_radio button.selected {
-    background-color: #009688; /* Couleur de fond lorsque le bouton est sélectionné */
-    color: #fff; /* Couleur du texte lorsque le bouton est sélectionné */
+    background-color: #009688;
+    color: #fff;
 }
+
 /* In Response */
 
 .container_createCriticInResponse{
@@ -144,9 +143,10 @@
     justify-content: center;
     position: absolute;
     gap: 50px;
-    top: 25%;
-    
+    top: 18%;
+    padding-bottom: 3%;
 }
+
 .form_critic_response{
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
     padding: 2%;
@@ -154,25 +154,22 @@
     flex-direction: column;
     gap: 2rem;
 }
+
 .container_all_form{
     width: 70%;
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
 }
+
 .ticket-details_response{
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
     width: 100%;
     padding: 2%;
 }
 
-.main_title_critic_response{
-
-}
-
 .container_indication_response{
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
     padding: 2%;
 }
-
-.img_response{
-
+.response_padding{
+    padding: 2%
 }

@@ -8,31 +8,29 @@
 <link rel="stylesheet" href="{% static 'djangoApp/css/signup.css' %}">
 </head>
 <body>
-    <header id="header"><h1>Signup</h1></header>
+    <header id="header"><h1 tabindex="0">Signup</h1></header>
     <div class="container_signup">
         {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+            <ul>
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <h2>Inscrivez-vous maintenant</h2>
         <form method="post" action="{% url 'signup' %}" class="form">
             {% csrf_token %}
             <div class="container_inputs">
-                <input type="email" name="email" placeholder="adresse email" required>
-                <input type="password" name="password1" placeholder="mot de passe" id="password" required>
-                <input type="password" name="password2" placeholder="confirmer mot de passe" id="confirmPassword" required>
+                <input type="email" name="email" placeholder="adresse email" required tabindex="1">
+                <input type="password" name="password1" placeholder="mot de passe" id="password" required tabindex="2">
+                <input type="password" name="password2" placeholder="confirmer mot de passe" id="confirmPassword" required tabindex="3">
             </div>
             <div class="container_buttons">
-                <button type="button" class="btn returnHome" id="returnHome">Retourner</button>
-                <button type="submit" class="btn" id="signup">S'inscrire</button>
+                <button type="button" class="btn returnHome" id="returnHome" tabindex="4">Retourner</button>
+                <button type="submit" class="btn" id="signup" tabindex="5">S'inscrire</button>
             </div>
         </form>
-        
     </div>
-
     <script src="{% static 'djangoApp/js/signup.js' %}"></script>
 </body>
 </html>

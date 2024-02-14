@@ -29,9 +29,7 @@
             <div class="container_indication">
                 <p>Vous êtes en train de poster en réponse à </p>
             </div>
-            
             <div class="top_card">
-                
                 <div class="card_ticket">
                     <div class="container_author_date">
                         {% if item.user == item.ticket.user%}
@@ -42,19 +40,17 @@
                             <p>{{ item.ticket.time_created|date:"H:i, d F Y" }}</p>
                         {% endif %}
                     </div>
-                <!-- Afficher les informations du ticket ici -->
-                <p>{{ item.ticket.title }}</p>
-                <p>{{ item.ticket.description }}</p>
-                {% if item.ticket.image %}
-                    <img src="{{ item.ticket.image.url }}" alt="Image du ticket" class="edit-img"/>
-                {% endif %}
+                    <p>{{ item.ticket.title }}</p>
+                    <p>{{ item.ticket.description }}</p>
+                    {% if item.ticket.image %}
+                        <img src="{{ item.ticket.image.url }}" alt="{{ item.ticket.title }}" class="edit-img"/>
+                    {% endif %}
                 </div>  
             </div>
             <div class="card_ticket">
                 <div class="container_indication">
                     <p>Critique </p>
                 </div>
-                <!-- Formulaire pour modifier la critique -->
                 <form id="editForm" method="post" action="{% url 'edit_review' item.id %}" class="form_edit">
                     {% csrf_token %}
                     <label for="headline">Titre</label>
@@ -68,7 +64,6 @@
                     </div>
                     <label for="body">Commentaires</label>
                     <textarea name="body" placeholder={{item.body}} id="body"></textarea>
-                    <!-- Autres champs -->
                     <button type="submit" class="btn">Envoyer</button>
                 </form>
             </div>
@@ -82,27 +77,14 @@
                 <label for="description">Description</label>
                 <input type="text" name="description" id="description" placeholder="{{ item.description }}">
                 <label for="image">Image</label>
-                <!-- Pré-remplir la valeur de l'input avec le nom de l'image s'il existe -->
                 <input type="file" name="image" id="image"/>
                 {% if item.image %}
-                    <img src="{{ item.image.url }}" alt="Image du ticket" class="edit-img"/>
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="edit-img"/>
                 {% endif %}
                 <button type="submit" class="btn">Envoyer</button>
             </form>
         </div>
-        
         {% endif %}
     </div>
-
-    <script>
-        // Remplir les champs du formulaire avec les informations de la critique
-       // document.addEventListener('DOMContentLoaded', function() {
-         //   var headline = "{{ item.headline }}";
-         //   var body = "{{ item.body }}";
-
-         //   document.getElementById('headline').value = headline;
-          //  document.getElementById('body').value = body;
-      //  });
-    </script>
 </body>
 </html>

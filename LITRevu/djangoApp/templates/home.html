@@ -8,25 +8,34 @@
 <link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
 </head>
 <body>
-    <header id="header"><h1>LITReview</h1></header>
+    <header id="header"><h1 tabindex="0">LITReview</h1></header>
     <div class="container_home">
-        <div class="container_signup">
-            <h2>Inscrivez-vous maintenant</h2>
-            <button type="submit" class="btn" id="signup">S'inscrire</button>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="container_options">
+            <div class="container_signup">
+                <h2>Inscrivez-vous maintenant</h2>
+                
+                <button type="submit" class="btn" id="signup" tabindex="1">S'inscrire</button>
+            </div>
+            <div class="container_login">
+                <h3>Connectez-vous</h3>
+                <form method="post" action="{% url 'login' %}" class="form">
+                    {% csrf_token %}
+                    <div class="container_inputs">
+                        <input type="text" name="username" placeholder="Nom d'utilisateur" required tabindex="2">
+                        <input type="password" name="password" placeholder="Mot de passe" required tabindex="3">
+                    </div>
+                    <button type="submit" class="btn" id="login" tabindex="4">Se connecter</button>
+                </form>            
+            </div>
         </div>
-        <div class="container_login">
-            <h3>Connectez-vous</h3>
-            <form method="post" action="{% url 'login' %}" class="form">
-                {% csrf_token %}
-                <div class="container_inputs">
-                    <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-                    <input type="password" name="password" placeholder="Mot de passe" required>
-                </div>
-                <button type="submit" class="btn" id="login">Se connecter</button>
-            </form>            
         </div>
-    </div>
-
     <script src="{% static 'djangoApp/js/home.js' %}"></script>
 </body>
 </html>
