@@ -151,6 +151,14 @@ a{
     -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
 }
+.related-review{
+  -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23); 
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+    gap: 2rem;
+}
 .star-rating {
     direction: rtl; /* Pour que les étoiles soient remplies de droite à gauche */
     font-size: 0; /* Pour éliminer l'espace entre les éléments inline-block */

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LITReview - Flux</title>
     {% load static %}
-<link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
-<link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'djangoApp/css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'djangoApp/css/home.css' %}">
 </head>
 <body>
     <header id="header">
@@ -22,12 +22,14 @@
         </nav>
     </header>
     <div class="container_buttons">
-        <a href="{% url 'createCritic' %}" class="btn">Créer une critique</a>
+        {% if not ticket_exists %}
+            <a href="{% url 'createCritic' %}" class="btn">Créer une critique</a>
+        {% endif %}
         <a href="{% url 'createTicket' %}" class="btn">Demander une critique</a>
     </div>
     <div class="container_flux">
         {% for item in items %}
-            {% if item.headline %}  <!-- Supposons que 'headline' soit unique aux Reviews -->
+            {% if item.headline %}
                 <div class="review">
                     <div class="review-header">
                         <p>
@@ -37,12 +39,12 @@
                             {{ item.user.username }} a créé une critique.
                         {% endif %}
                         </p>
-                      <!-- Afficher l'heure de création avec le format désiré -->
-                    <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
+                        <p class="time">{{ item.time_created|date:"H:i, d F Y" }}</p>
                     </div>
                     <div class="container-title-score">
                         <h2>{{ item.headline }}</h2>
-                        <p>-</p><p> 
+                        <p>-</p>
+                        <p> 
                             <span class="star-rating">
                             {% for i in "12345" %}
                                 <span class="{% if item.rating|default:'0'|add:0 >= forloop.counter %}filled{% endif %}">&#9733;</span>
@@ -51,12 +53,11 @@
                         </p>
                     </div>
                     <p>{{ item.body }}</p>
-                    <!-- Afficher les détails spécifiques aux critiques -->
                     {% if item.image %}
                         <img src="{{ item.image.url }}" alt="Image de la critique" class="flux-img"/>
                     {% endif %}
                 </div>
-            {% else %}  <!-- Sinon, c'est un Ticket -->
+            {% else %}
                 <div class="ticket">
                     <div class="review-header">
                         <p>
@@ -73,15 +74,42 @@
                     {% if item.image %}
                         <img src="{{ item.image.url }}" alt="Image du ticket" class="flux-img"/>
                     {% endif %}
-                    <div class="container_buttons"><a href="{% url 'createCritic' %}" class="btn">Créer une critique</a></div>
+                    {% for review in item.get_related_reviews %}
+                        <div class="related-review">
+                            <div class="review-header">
+                                <p>
+                                {% if review.user == request.user %}
+                                    Vous avez écrit une critique associée.
+                                {% else %}
+                                    {{ review.user.username }} a écrit une critique associée.
+                                {% endif %}
+                                </p>
+                                <p class="time">{{ review.time_created|date:"H:i, d F Y" }}</p>
+                            </div>
+                            <div class="container-title-score">
+                                <h2>{{ review.headline }}</h2>
+                                <p>-</p>
+                                <p> 
+                                    <span class="star-rating">
+                                    {% for i in "12345" %}
+                                        <span class="{% if review.rating|default:'0'|add:0 >= forloop.counter %}filled{% endif %}">&#9733;</span>
+                                    {% endfor %}
+                                    </span>
+                                </p>
+                            </div>
+                            <p>{{ review.body }}</p>
+                        </div>
+                    {% empty %}
+                        <p>Aucune critique associée.</p>
+                        <div class="container_buttons">
+                            <a href="{% url 'createCriticInResponse' ticket_id=item.id %}" class="btn">Créer une critique</a>
+                    </div>
+                    {% endfor %}
                 </div>
             {% endif %}
         {% empty %}
             <p>Aucun ticket ou critique disponible.</p>
         {% endfor %}
     </div>
-    
-    
-    <!--<script src="{% static 'djangoApp/js/home.js' %}"></script>-->
 </body>
 </html>

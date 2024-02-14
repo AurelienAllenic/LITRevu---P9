@@ -31,6 +31,7 @@ urlpatterns = [
     path('login', views.login_view, name='login'),
     path('tickets', views.tickets_view, name='tickets'),
     path('createCritic', views.createCritic_view, name='createCritic'),
+    path('createCriticInResponse/<int:ticket_id>/', views.createCriticInResponse_view, name='createCriticInResponse'),
     path('createTicket', views.createTicket_view, name='createTicket'),
     path('logout', LogoutView.as_view(next_page='/'), name='logout'),
     path('edit/<str:type>/<int:id>/', views.edit_post, name='edit_post'),

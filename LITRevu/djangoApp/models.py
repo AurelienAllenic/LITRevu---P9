@@ -18,6 +18,10 @@ class Ticket(models.Model):
             'image': self.image.url if self.image else None,
             'type': 'ticket'
         }
+    
+    def get_related_reviews(self):
+        return self.reviews.all()
+
 
 class Review(models.Model):
     title = models.CharField(max_length=100)
@@ -56,3 +60,4 @@ class UserFollows(models.Model):
 
     class Meta:
         unique_together = ('user', 'followed_user', )
+

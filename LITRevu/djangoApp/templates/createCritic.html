@@ -26,29 +26,31 @@
         <form method="post" enctype="multipart/form-data" class="form_critic">
             {% csrf_token %}
             <div class="container_item">
-                {{ ticket_form.title.label_tag }}  <!-- Titre -->
+                {{ ticket_form.title.label_tag }}
                 {{ ticket_form.title }}
 
-                {{ ticket_form.description.label_tag }}  <!-- Description -->
+                {{ ticket_form.description.label_tag }}
                 {{ ticket_form.description }}
 
-                {{ ticket_form.image.label_tag }}  <!-- Image à télécharger -->
+                {{ ticket_form.image.label_tag }}
                 {{ ticket_form.image }}
             </div>
             <div class="container_item">
-                {{ review_form.headline.label_tag }}  <!-- Titre de la critique -->
+                {{ review_form.headline.label_tag }}
                 {{ review_form.headline }}
                 
-                {{ review_form.rating.label_tag }}  <!-- Note -->
+                {{ review_form.rating.label_tag }}
                 <div class="container_radio">
                 {{ review_form.rating }}
             </div>
                 </div>
                 </div>
-                {{ review_form.body.label_tag }}  <!-- Corps de la critique -->
-                {{ review_form.body }}
+                <div class="container_item">
+                    {{ review_form.body.label_tag }}
+                    {{ review_form.body }}
+                </div>
             </div>
-            <button type="submit" class="btn">Soumettre</button>  <!-- Bouton de soumission -->
+            <button type="submit" class="btn">Soumettre</button>
         </form>
     </section>
 </body>

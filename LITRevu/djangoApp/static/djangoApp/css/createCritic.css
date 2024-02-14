@@ -11,6 +11,7 @@
 .main_title_critic {
     font-size: 35px;
     font-weight: bold;
+    text-align: center;
 }
 
 .form_critic {
@@ -127,10 +128,51 @@
 }
 [id =id_rating] {
     display: flex;
-    flex-direction: column;
-    margin-right: 20px; /* Espacement entre les boutons de notation */
+    gap: 2rem;
 }
 .container_radio button.selected {
     background-color: #009688; /* Couleur de fond lorsque le bouton est sélectionné */
     color: #fff; /* Couleur du texte lorsque le bouton est sélectionné */
+}
+/* In Response */
+
+.container_createCriticInResponse{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    position: absolute;
+    gap: 50px;
+    top: 25%;
+    
+}
+.form_critic_response{
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.container_all_form{
+    width: 70%;
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+}
+.ticket-details_response{
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    width: 100%;
+    padding: 2%;
+}
+
+.main_title_critic_response{
+
+}
+
+.container_indication_response{
+    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.23);
+    padding: 2%;
+}
+
+.img_response{
+
 }

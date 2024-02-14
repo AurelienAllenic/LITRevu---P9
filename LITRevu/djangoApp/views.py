@@ -1,46 +1,52 @@
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib import messages
-from .models import Ticket
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseBadRequest
+from .models import Ticket
 from .models import UserFollows
-from .forms import TicketForm, ReviewForm
 from .models import Review
 from itertools import chain
+from .forms import TicketForm, ReviewForm
 from operator import attrgetter
-from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
-# Assurez-vous d'importer la fonction reverse
-from django.urls import reverse
 import logging
-import json
 
 logger = logging.getLogger(__name__)
 
+
 def home_view(request):
-    # Vue pour la page d'accueil
     return render(request, 'home.html')
 
-def signup_view(request):
-    # Vue pour la page des catégories
-    return render(request, 'signup.html')
 
 @login_required(login_url='/')
 def flux_view(request):
-    tickets = Ticket.objects.all()
+    displayed_items = set()
+    tickets = Ticket.objects.prefetch_related('reviews').all()
     reviews = Review.objects.all()
+    combined_list = []
+    # Ajoutez les tickets pas encore affichés à la liste combinée
+    for ticket in tickets:
+        if ticket.id not in displayed_items:
+            combined_list.append(ticket)
+            displayed_items.add(ticket.id)
 
-    # Combine tickets et reviews en une seule liste
+    # Ajoutez les critiques pas encore affichées à la liste combinée
+    for review in reviews:
+        if review.id not in displayed_items:
+            combined_list.append(review)
+            displayed_items.add(review.id)
+
+    # Trier la liste combinée par time_created
     combined_list = sorted(
-        chain(tickets, reviews),
-        key=attrgetter('time_created'),  # Tri par 'time_created'
-        reverse=True  # Du plus récent au plus ancien
-    )
+                        combined_list,
+                        key=attrgetter('time_created'),
+                        reverse=True
+                        )
 
     context = {
-        'items': combined_list,  # Passez la liste combinée sous le nom 'items' au template
+        'items': combined_list,
     }
     return render(request, 'flux.html', context)
 
@@ -54,13 +60,18 @@ def posts_view(request):
     combined_items = list(chain(user_tickets, user_reviews))
 
     # Trier la liste combinée par 'time_created' en ordre décroissant
-    combined_items_sorted = sorted(combined_items, key=lambda x: x.time_created, reverse=True)
+    combined_items_sorted = sorted(
+                                combined_items,
+                                key=lambda x: x.time_created,
+                                reverse=True
+                            )
 
     context = {
         'items': combined_items_sorted,
     }
 
     return render(request, 'posts.html', context)
+
 
 @login_required
 def createCritic_view(request):
@@ -85,9 +96,36 @@ def createCritic_view(request):
     context = {
         'ticket_form': ticket_form,
         'review_form': review_form,
-        'rating_range': range(1, 6),  # Ajoutez ceci pour passer la plage de notes
+        'rating_range': range(1, 6),
     }
     return render(request, 'createCritic.html', context)
+
+
+@login_required
+def createCriticInResponse_view(request, ticket_id):
+    # Récupérer le ticket en fonction de son ID
+    ticket = get_object_or_404(Ticket, pk=ticket_id)
+
+    if request.method == 'POST':
+        # ReviewForm avec form datas
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            # Sauvegarder la critique associée au ticket
+            review = review_form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('flux')
+    else:
+        # Créer une instance vide de ReviewForm
+        review_form = ReviewForm()
+
+    context = {
+        'ticket': ticket,
+        'review_form': review_form,
+    }
+    return render(request, 'createCriticInResponse.html', context)
+
 
 @login_required
 def createTicket_view(request):
@@ -97,14 +135,14 @@ def createTicket_view(request):
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect('flux')  # Redirigez vers la page de votre choix après la soumission
+            return redirect('flux')
     else:
         ticket_form = TicketForm()
 
     context = {
-        'ticket_form': ticket_form,  # Passez uniquement ticket_form au contexte
+        'ticket_form': ticket_form,
     }
-    return render(request, 'createTicket.html', context)  # Assurez-vous d'utiliser le bon template
+    return render(request, 'createTicket.html', context)
 
 
 @login_required(login_url='/')
@@ -126,11 +164,23 @@ def subscribes_view(request):
         username_to_follow = request.POST.get('username')
         try:
             user_to_follow = User.objects.get(username=username_to_follow)
-            if user_to_follow != request.user and not UserFollows.objects.filter(user=request.user, followed_user=user_to_follow).exists():
-                UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
-                messages.success(request, f"Vous suivez maintenant {username_to_follow}")
+            if (user_to_follow != request.user and
+                not UserFollows.objects.filter(
+                    user=request.user, followed_user=user_to_follow
+                    ).exists()):
+                UserFollows.objects.create(
+                                            user=request.user,
+                                            followed_user=user_to_follow
+                                            )
+                messages.success(
+                                    request,
+                                    f"Vous suivez {username_to_follow}"
+                                )
             else:
-                messages.error(request, "Vous ne pouvez pas suivre cet utilisateur")
+                messages.error(
+                                request,
+                                "Vous ne pouvez pas suivre cet utilisateur"
+                                )
         except User.DoesNotExist:
             messages.error(request, "Utilisateur non trouvé")
 
@@ -139,6 +189,7 @@ def subscribes_view(request):
         'user_follows': user_follows,
         'user_followers': user_followers
     })
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -149,72 +200,87 @@ def login_view(request):
             login(request, user)
             return redirect('flux')
         else:
-            messages.error(request, 'Nom d’utilisateur ou mot de passe incorrect.')
+            messages.error(
+                            request,
+                            'Nom d’utilisateur ou mot de passe incorrect.'
+                            )
             return redirect('home')
     return render(request, 'home.html')
+
 
 def signup_view(request):
     if request.method == 'POST':
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        
+
         if password1 == password2:
             if User.objects.filter(email=email).exists():
                 messages.error(request, "L'adresse email est déjà utilisée.")
             else:
-                user = User.objects.create_user(username=email, email=email, password=password1)
+                user = User.objects.create_user(
+                                                username=email,
+                                                email=email,
+                                                password=password1
+                                                )
                 user.save()
                 login(request, user)
-                return redirect('home')  # Redirigez vers la page d'accueil après l'inscription réussie
+                return redirect('home')
         else:
             messages.error(request, "Les mots de passe ne correspondent pas.")
 
     return render(request, 'signup.html')
 
+
 def tickets_view(request):
     tickets = Ticket.objects.all()  # Récupère tous les tickets
     return render(request, 'tickets.html', {'tickets': tickets})
+
 
 @login_required
 def edit_post(request, type, id):
     if type == 'ticket':
         item = get_object_or_404(Ticket, pk=id, user=request.user)
-        reviews = item.reviews.all()  # Récupérer toutes les critiques associées à ce ticket
-        return render(request, 'edit.html', {'item': item, 'reviews': reviews, 'type': 'ticket'})
+        reviews = item.reviews.all()
+        return render(
+                        request,
+                        'edit.html',
+                        {'item': item, 'reviews': reviews, 'type': 'ticket'}
+                    )
     elif type == 'review':
         item = get_object_or_404(Review, pk=id, user=request.user)
-        ticket = item.ticket  # Récupérer le ticket associé à cette critique
+        ticket = item.ticket
         print(ticket)
-        return render(request, 'edit.html', {'item': item, 'ticket': ticket, 'type': 'review'})
+        return render(
+                    request,
+                    'edit.html',
+                    {'item': item, 'ticket': ticket, 'type': 'review'}
+                    )
     else:
         return HttpResponseBadRequest('Type non reconnu')
 
 
-
 @login_required
 def edit_review(request, id):
-    # Récupérer la critique à éditer
     try:
         review = Review.objects.get(id=id, user=request.user)
     except Review.DoesNotExist:
-        # Gérer le cas où la critique n'existe pas ou n'appartient pas à l'utilisateur
-        return redirect('flux')  # Rediriger vers la page de votre choix
+        # pas de critique ou pas à l'user
+        return redirect('flux')
 
     if request.method == 'POST':
-        # Traitement du formulaire soumis pour mettre à jour la critique
         review_form = ReviewForm(request.POST, instance=review)
         if review_form.is_valid():
             review_form.save()
-            return redirect('flux')  # Rediriger vers la page de votre choix après la mise à jour
+            return redirect('flux')
     else:
-        # Afficher le formulaire de modification de la critique avec les données existantes pré-remplies
         review_form = ReviewForm(instance=review)
 
     context = {
         'review_form': review_form,
     }
     return render(request, 'edit_review.html', context)
+
 
 @login_required
 def edit_ticket(request, id):
@@ -225,12 +291,10 @@ def edit_ticket(request, id):
         form = TicketForm(request.POST, request.FILES, instance=ticket)
         if form.is_valid():
             form.save()
-            return redirect('flux')  # Rediriger vers la page de votre choix après la modification
+            return redirect('flux')
     else:
-        # Créer une instance de TicketForm avec l'instance de ticket existante
         form = TicketForm(instance=ticket)
 
-    # Passer le formulaire au contexte du rendu
     context = {
         'form': form,
         'item': ticket
@@ -251,45 +315,85 @@ def delete_post(request, type, id):
     else:
         return HttpResponseBadRequest('Type non reconnu')
 
+
 def search_users(request):
     users = []
     if request.method == 'POST':
         search_query = request.POST.get('search_query')
         users = User.objects.filter(username__icontains=search_query)
         if not users:
-            messages.error(request, "Aucun utilisateur n'a été trouvé avec ce nom.")
-    return render(request, 'subscribes.html', {'users': users})
+            messages.error(
+                            request,
+                            "Aucun utilisateur n'a été trouvé avec ce nom."
+                        )
+        user_follows = UserFollows.objects.filter(user=request.user)
+        user_followers = UserFollows.objects.filter(followed_user=request.user)
+    return render(
+                request,
+                'subscribes.html',
+                {
+                    'users': users,
+                    'user_follows': user_follows,
+                    'user_followers': user_followers
+                }
+                )
+
 
 @login_required
 def follow_user(request):
     if request.method == 'POST':
         username_to_follow = request.POST.get('username')
         try:
-            user_to_follow = User.objects.get(username=username_to_follow)
-            if user_to_follow != request.user and not UserFollows.objects.filter(user=request.user, followed_user=user_to_follow).exists():
-                UserFollows.objects.create(user=request.user, followed_user=user_to_follow)
-                messages.success(request, f"Vous suivez maintenant {username_to_follow}")
+            to_follow = User.objects.get(username=username_to_follow)
+            if to_follow != request.user and not UserFollows.objects.filter(
+                user=request.user,
+                followed_user=to_follow
+            ).exists():
+                UserFollows.objects.create(
+                                            user=request.user,
+                                            followed_user=to_follow
+                                            )
+                messages.success(
+                                    request,
+                                    f"Vous suivez maintenant"
+                                    f"{username_to_follow}"
+                                )
             else:
-                messages.error(request, "Vous ne pouvez pas suivre cet utilisateur")
+                messages.error(
+                                request,
+                                "Vous ne pouvez pas suivre cet utilisateur"
+                            )
         except User.DoesNotExist:
             messages.error(request, "Utilisateur non trouvé")
 
     # Actualiser la liste d'abonnements
     user_follows = UserFollows.objects.filter(user=request.user)
+    user_followers = UserFollows.objects.filter(followed_user=request.user)
 
     # Rediriger vers la page précédente après la requête POST
-    return render(request, 'subscribes.html', {'user_follows': user_follows})
+    return render(
+                    request,
+                    'subscribes.html',
+                    {
+                        'user_follows': user_follows,
+                        'user_followers': user_followers
+                    }
+                )
+
 
 @login_required
 def unfollow_user(request):
     if request.method == 'POST':
-        username_to_unfollow = request.POST.get('username')
+        u = request.POST.get('username')
         try:
-            user_to_unfollow = User.objects.get(username=username_to_unfollow)
-            follow_relation = UserFollows.objects.filter(user=request.user, followed_user=user_to_unfollow).first()
+            user_to_unfollow = User.objects.get(username=u)
+            follow_relation = UserFollows.objects.filter(
+                user=request.user,
+                followed_user=user_to_unfollow
+            ).first()
             if follow_relation:
                 follow_relation.delete()
-                messages.success(request, f"Vous avez arrêté de suivre {username_to_unfollow}")
+                messages.success(request, f"Vous avez arrêté de suivre {u}")
             else:
                 messages.error(request, "Vous ne suivez pas cet utilisateur")
         except User.DoesNotExist:

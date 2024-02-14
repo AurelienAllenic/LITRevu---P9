@@ -1,4 +1,3 @@
-# forms.py
 from django import forms
 from .models import Ticket, Review
 
@@ -13,6 +12,8 @@ class ReviewForm(forms.ModelForm):
 
     rating = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
 
+
     class Meta:
         model = Review
         fields = ['headline', 'rating', 'body']
+
