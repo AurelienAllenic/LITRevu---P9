@@ -10,7 +10,7 @@ Authentification utilisateur : L'application comprend un système d'authentifica
 # Installation
 Cloner le dépôt :
 ```
-git clone https://github.com/votre-utilisateur/litrevu.git
+git clone https://github.com/AurelienAllenic/LITRevu---P9
 ```
 Accéder au répertoire du projet :
 ```
