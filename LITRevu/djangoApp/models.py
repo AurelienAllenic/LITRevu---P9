@@ -4,8 +4,11 @@ from django.db import models
 
 
 class Ticket(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=128)
+    description = models.TextField(
+                                    blank=True,
+                                    max_length=2048
+                                )
     user = models.ForeignKey(
                             to=settings.AUTH_USER_MODEL,
                             on_delete=models.CASCADE
@@ -28,7 +31,7 @@ class Ticket(models.Model):
 
 
 class Review(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
     rating = models.PositiveSmallIntegerField(
         validators=[
@@ -72,7 +75,7 @@ class UserFollows(models.Model):
         related_name='followers',
         on_delete=models.CASCADE
     )
-    # Peut-être un champ pour la date de la relation
+
     time_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
