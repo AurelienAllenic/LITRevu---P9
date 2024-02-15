@@ -14,7 +14,7 @@ git clone https://github.com/AurelienAllenic/LITRevu---P9
 ```
 Accéder au répertoire du projet :
 ```
-cd litrevu
+cd ./LITRevu
 ```
 Créer un environnement virtuel :
 ```
