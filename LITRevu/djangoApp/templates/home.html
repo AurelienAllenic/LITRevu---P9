@@ -11,17 +11,16 @@
 <body>
     <header id="header"><h1 tabindex="0">LITReview</h1></header>
     <div class="container_home">
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
         <div class="container_options">
             <div class="container_signup">
                 <h2>Inscrivez-vous maintenant</h2>
-                
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %} 
                 <button type="submit" class="btn" id="signup" tabindex="1">S'inscrire</button>
             </div>
             <div class="container_login">

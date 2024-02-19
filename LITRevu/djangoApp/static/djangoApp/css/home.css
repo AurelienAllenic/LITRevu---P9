@@ -22,7 +22,16 @@ a{
     font-weight: bold;
     width: 100%;
 }
-
+.messages{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.messages li{
+  color: red;
+}
 .container_home{
     display: flex;
     flex-direction: column;
